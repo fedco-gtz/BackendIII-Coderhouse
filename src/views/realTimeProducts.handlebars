@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Products</title>
+</head>
+<body>
+    <h1>Real-Time Products List</h1>
+    <ul id="product-list">
+      {{#each products}}
+        <li>ID: {{this.id}}, Title: {{this.title}}, Price: ${{this.price}}</li>
+      {{/each}}
+    </ul>
+
+    <h2>Add a Product</h2>
+    <form id="product-form">
+      <input type="text" name="title" placeholder="Title" required>
+      <input type="text" name="description" placeholder="Description" required>
+      <input type="text" name="code" placeholder="Code" required>
+      <input type="number" name="price" placeholder="Price" required>
+      <input type="number" name="stock" placeholder="Stock" required>
+      <input type="text" name="category" placeholder="Category" required>
+      <button type="submit">Add Product</button>
+    </form>
+
+    <h2>Delete a Product</h2>
+    <form id="delete-form">
+      <input type="text" name="productId" placeholder="Product ID" required>
+      <button type="submit">Delete Product</button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        if (!window.socket) {
+          const socket = io();
+          window.socket = socket;
+
+          socket.on('updateProducts', (products) => {
+            console.log(products);
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = '';
+            products.forEach((product) => {
+              const listItem = document.createElement('li');
+              listItem.textContent = `ID: ${product.id} - Title: ${product.title} - Price: $${product.price}`;
+              productList.appendChild(listItem);
+            });
+          });
+
+          const productForm = document.getElementById('product-form');
+          if (productForm) {
+            productForm.addEventListener('submit', (e) => {
+              e.preventDefault();
+              const formData = new FormData(productForm);
+              const product = {};
+              formData.forEach((value, key) => {
+                product[key] = value;
+              });
+              socket.emit('createProduct', product);
+              productForm.reset();
+            });
+          }
+
+          const deleteForm = document.getElementById('delete-form');
+          if (deleteForm) {
+            deleteForm.addEventListener('submit', (e) => {
+              e.preventDefault();
+              const productId = new FormData(deleteForm).get('productId');
+              socket.emit('deleteProduct', productId);
+              deleteForm.reset();
+            });
+          }
+        }
+      });
+    </script>
+</body>
+</html>

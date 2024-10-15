@@ -1,0 +1,22 @@
+<!-- src/views/editProduct.handlebars -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product</title>
+</head>
+<body>
+    <h1>Edit Product</h1>
+    <form action="/admin/edit/{{product.id}}" method="POST">
+        <label>Title: <input type="text" name="title" value="{{product.title}}" required></label><br>
+        <label>Description: <input type="text" name="description" value="{{product.description}}" required></label><br>
+        <label>Code: <input type="text" name="code" value="{{product.code}}" required></label><br>
+        <label>Price: <input type="number" name="price" value="{{product.price}}" required></label><br>
+        <label>Stock: <input type="number" name="stock" value="{{product.stock}}" required></label><br>
+        <label>Category: <input type="text" name="category" value="{{product.category}}" required></label><br>
+        <label>Thumbnails (comma-separated URLs): <input type="text" name="thumbnails" value="{{product.thumbnails}}"></label><br>
+        <button type="submit">Update Product</button>
+    </form>
+</body>
+</html>

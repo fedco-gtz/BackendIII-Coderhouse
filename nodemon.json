@@ -1,0 +1,6 @@
+{
+  "watch": ["src"],
+  "ignore": ["src/data/carts.json", "src/data/products.json"],
+  "ext": "js,json,handlebars",
+  "exec": "node ./src/app.js"
+}

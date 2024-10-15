@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Product List</title>
+</head>
+<body>
+    <h1>Product List</h1>
+    <header>
+        <h2>Welcome, {{user.first_name}} {{user.last_name}}</h2>
+        <a href="/logout">Logout</a>
+    </header>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Code</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each products}}
+            <tr>
+                <td>{{this.title}}</td>
+                <td>{{this.description}}</td>
+                <td>{{this.code}}</td>
+                <td>${{this.price}}</td>
+                <td>{{this.stock}}</td>
+                <td>{{this.category}}</td>
+                <td>
+                    <a href="/admin/edit/{{this.id}}">Edit</a>
+                    <form action="/admin/delete/{{this.id}}" method="POST" style="display:inline;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <!-- Paginación -->
+    <div id="pagination">
+        {{#if hasPrevPage}}
+            <a href="?page={{prevPage}}">Previous</a>
+        {{/if}}
+        <span>Page {{page}} of {{totalPages}}</span>
+        {{#if hasNextPage}}
+            <a href="?page={{nextPage}}">Next</a>
+        {{/if}}
+    </div>
+    <!-- Botón para crear un nuevo producto -->
+    <div>
+        <a href="/admin/create">Create New Product</a>
+    </div>
+</body>
+</html>
