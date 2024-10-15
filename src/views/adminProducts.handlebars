@@ -1,27 +1,36 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Product List</title>
-</head>
 <body>
-    <h1>Product List</h1>
     <header>
-        <h2>Welcome, {{user.first_name}} {{user.last_name}}</h2>
-        <a href="/logout">Logout</a>
+        <div class="paragraph">
+            <p>Bienvenida/o {{user.first_name}} {{user.last_name}}</p>
+        </div>
+        <div class="nav-container">
+            <nav>
+                <ul>
+                    <li><a href="/logout">CERRAR SESIÓN</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="logo-container">
+            <img src="images/pages/logo.png" alt="Logo de VerdeVital" class="logo">
+        </div>
     </header>
+    <main>
+        <section class="products">
+            <h1 class="title">LISTA DE PRODUCTOS</h1>
+            <div class="pagination-container">
+                <a class="btn-added" href="/admin/create">Agregar producto</a>
+            </div>
+        </section>
+    </main>
     <table>
         <thead>
             <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Code</th>
-                <th>Price</th>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Precio</th>
                 <th>Stock</th>
-                <th>Category</th>
-                <th>Actions</th>
+                <th>Categoría</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -29,14 +38,13 @@
             <tr>
                 <td>{{this.title}}</td>
                 <td>{{this.description}}</td>
-                <td>{{this.code}}</td>
                 <td>${{this.price}}</td>
                 <td>{{this.stock}}</td>
                 <td>{{this.category}}</td>
-                <td>
-                    <a href="/admin/edit/{{this.id}}">Edit</a>
+                <td class="btn-link">
+                    <a class="btn-edit" href="/admin/edit/{{this.id}}">Editar</a>
                     <form action="/admin/delete/{{this.id}}" method="POST" style="display:inline;">
-                        <button type="submit">Delete</button>
+                        <button class="btn-delete" type="submit">Eliminar</button>
                     </form>
                 </td>
             </tr>
@@ -44,19 +52,357 @@
         </tbody>
     </table>
 
-    <!-- Paginación -->
-    <div id="pagination">
+    <div class="pagination-container" id="pagination">
         {{#if hasPrevPage}}
-            <a href="?page={{prevPage}}">Previous</a>
+        <a class="pagination-link" href="?page={{prevPage}}">Anterior</a>
         {{/if}}
-        <span>Page {{page}} of {{totalPages}}</span>
+        <span class="pagination-text">Página {{page}} de {{totalPages}}</span>
         {{#if hasNextPage}}
-            <a href="?page={{nextPage}}">Next</a>
+        <a class="pagination-link" href="?page={{nextPage}}">Siguiente</a>
         {{/if}}
-    </div>
-    <!-- Botón para crear un nuevo producto -->
-    <div>
-        <a href="/admin/create">Create New Product</a>
     </div>
 </body>
-</html>
+
+<style>
+    * {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    header {
+        background-image: url("../images/pages/frontPage.png");
+        background-size: cover;
+        background-position: center;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-container {
+        background-color: rgb(36, 36, 36);
+        text-align: center;
+        justify-content: center;
+        font-weight: bold;
+        width: 100%;
+        height: 40px;
+    }
+
+    .nav-container nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .nav-container nav ul li {
+        margin: 0 25px;
+    }
+
+    .nav-container nav ul li a {
+        color: white;
+        text-decoration: none;
+    }
+
+    .nav-container nav ul li a:hover {
+        text-decoration: none;
+        color: rgba(193, 255, 114, 0.87);
+        border-bottom-style: solid;
+        border-bottom-color: rgba(12, 192, 223, 0.87);
+    }
+
+    .logo-container {
+        margin: 20px 0;
+    }
+
+    .logo-container .logo {
+        max-height: 400px;
+    }
+
+    .text {
+        background-color: rgb(36, 36, 36);
+        color: white;
+        text-align: center;
+        padding: 5px 0;
+        font-weight: bold;
+    }
+
+    main {
+        padding: 20px;
+    }
+
+    .paragraph {
+        background-color: rgb(36, 36, 36);
+        text-align: center;
+        justify-content: center;
+        font-weight: bold;
+        width: 100%;
+        padding: 5px;
+    }
+
+    footer {
+        background-color: #333333;
+        color: #ffffff;
+        text-align: center;
+        padding: 10px 0;
+        width: 100%;
+        bottom: 0;
+    }
+
+    .products .title {
+        text-align: center;
+        padding-bottom: 20px;
+    }
+
+    .products .main-title {
+        text-align: center;
+        padding-bottom: 20px;
+        font-size: 34px;
+        font-weight: bold
+    }
+
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 20px;
+        justify-content: center;
+    }
+
+
+    .product-card {
+        flex: 0 0 calc(33.333% - 20px);
+        box-sizing: border-box;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        border: 3px solid rgba(0, 31, 85, 0.2);
+        border-radius: 15px;
+        background-color: rgb(246, 246, 246);
+    }
+
+    .product-card .product-id {
+        font-size: 18px;
+        color: #242424;
+        font-weight: bold;
+        padding: 10px;
+        padding-bottom: 0px;
+        padding-top: 0px;
+    }
+
+    .product-card .product--id {
+        font-size: 16px;
+        color: #242424;
+        font-weight: bold;
+        padding: 10px;
+        padding-bottom: 0px;
+        padding-top: 0px;
+    }
+
+    .product-card .product-title {
+        font-weight: bold;
+        font-size: 1.5em;
+        text-align: center;
+        padding: 5px;
+    }
+
+    .product-card .product--title {
+        font-weight: bold;
+        font-size: 1em;
+        text-align: center;
+        padding: 5px;
+    }
+
+    .product-card .product-description {
+        font-size: 0.9em;
+        text-align: center;
+        padding-top: 2px;
+        padding-bottom: 10px;
+    }
+
+    .product-card .product-stock {
+        font-size: 1em;
+        text-align: center;
+        padding: 5px;
+    }
+
+    .product-card .product--stock {
+        font-size: 0.8em;
+        text-align: center;
+        padding: 5px;
+    }
+
+    .product-card .product-price {
+        font-size: 2.2em;
+        text-align: center;
+        padding: 5px;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .product-card .product--price {
+        font-size: 1.5em;
+        text-align: center;
+        padding: 5px;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .product-card .trash {
+        background-color: #fe504f66;
+        border: 3px solid rgba(0, 31, 85, .2);
+        width: 300px;
+        height: 35px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        margin: auto;
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .product-card .trash:hover {
+        background-color: rgb(239, 77, 75);
+        border: 3px solid rgba(0, 31, 85, 0.2);
+        width: 300px;
+        height: 35px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: bold;
+        color: rgb(255, 255, 255);
+    }
+
+    .btn-link {
+        display: flex;
+        justify-content: center;
+        text-decoration: none;
+    }
+
+    .btn-prima {
+        background-color: #7bb62e;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-weight: bold;
+        font-size: 32px;
+        margin: 20px;
+    }
+
+    .btn-secon {
+        background-color: #0cc0df;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-weight: bold;
+        font-size: 32px;
+    }
+
+    .btn-prima:hover,
+    .btn-secon:hover {
+        background-color: #44bb87;
+    }
+
+    .btn-delete {
+        background-color: #DC3545;
+        color: white;
+        text-decoration: none;
+        border: 2px solid #DC3545;
+        font-weight: bold;
+        font-size: 14px;
+        margin: 15px;
+        border-radius: 10px;
+        padding: 10px 15px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .btn-delete:hover {
+        background-color: white;
+        color: #DC3545;
+    }
+
+    .btn-edit {
+        background-color: #6C757D;
+        color: white;
+        text-decoration: none;
+        border: 2px solid #6C757D;
+        font-weight: bold;
+        font-size: 14px;
+        margin: 15px;
+        border-radius: 10px;
+        padding: 10px 15px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .btn-edit:hover {
+        background-color: white;
+        color: #6C757D;
+    }
+
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .pagination-link {
+        text-decoration: none;
+        color: #ffffff;
+        padding: 10px 15px;
+        margin: 5px;
+        background-color: rgb(123, 182, 46);
+        border: 2px solid rgb(123, 182, 46);
+        border-radius: 10px;
+        transition: background-color 0.3s, color 0.3s;
+        font-weight: bold;
+    }
+
+    .btn-added {
+        text-decoration: none;
+        background-color: #007bff;
+        color: #ffffff;
+        padding: 10px 15px;
+        margin: 5px;
+        border: 2px solid #007bff;
+        border-radius: 10px;
+        transition: background-color 0.3s, color 0.3s;
+        font-weight: bold;
+    }
+
+    .btn-added:hover {
+        background-color: #ffffff;
+        color: #007bff;
+    }
+
+    .pagination-link:hover {
+        background-color: #ffffff;
+        color: rgb(123, 182, 46);
+    }
+
+    .pagination-text {
+        font-size: 16px;
+        margin: 10px 0;
+        color: #333333;
+        font-weight: bold;
+    }
+</style>

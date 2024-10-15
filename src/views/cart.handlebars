@@ -23,19 +23,23 @@
     <main>
         <section class="products">
             <h1 class="title">CARRITO</h1>
+
+            <div id="cart-products-list" class="products-grid">
+                {{#each products}}
+                <div class="product-card">
+                    <h4 class="product--id">Código: {{this.product.code}} | {{this.product.category}}</h4>
+                    <h1 class="product--title">{{this.product.title}}</h1>
+                    <h2 class="product--stock">Cantidad: {{this.quantity}}</h2>
+                    <p class="product--price">Precio: ${{this.product.price}}</p>
+                    <br>
+                    <a class="btn-link">
+                        <button class="btn-delete" onclick="removeFromCart('{{this.product._id}}')">ELIMINAR PRODUCTO</button>
+                    </a>
+                </div>
+                {{/each}}
+            </div>
         </section>
     </main>
-
-
-    <ul id="cart-products-list">
-        {{#each products}}
-        <li>
-            Product: {{this.product.title}} - Quantity: {{this.quantity}} - Price: ${{this.product.price}}
-            <button onclick="removeFromCart('{{this.product._id}}')">Remove</button>
-        </li>
-        {{/each}}
-    </ul>
-
 
     <div class="pagination-container">
         <form class="btn-link" action="/api/carts/{{cartId}}/purchase" method="POST">
@@ -57,7 +61,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.message) {
-                    alert('Product removed from cart');
+                    alert('Producto eliminado del carrito');
                     window.location.reload();
                 } else {
                     alert('Error removing product from cart');
@@ -326,22 +330,22 @@
         background-color: #44bb87;
     }
 
-    .btn-cart {
-        background-color: #44bb87;
+    .btn-delete {
+        background-color: #DC3545;
         color: white;
         text-decoration: none;
-        border: 3px solid #44bb87;
+        border: 3px solid #DC3545;
         font-weight: bold;
-        font-size: 32px;
-        margin: 25px;
+        font-size: 18px;
+        margin: 15px;
         border-radius: 10px;
         padding: 10px 15px;
         transition: background-color 0.3s, color 0.3s;
     }
 
-    .btn-cart:hover {
+    .btn-delete:hover {
         background-color: white;
-        color: #44bb87;
+        color: #DC3545;
     }
 
     .pagination-container {

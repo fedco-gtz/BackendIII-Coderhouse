@@ -12,7 +12,7 @@ export const addProductToCart = async (req, res) => {
 export const removeProductFromCart = async (req, res) => {
   try {
     const cart = await CartService.removeProductFromCart(req.user.cart, req.body.productId);
-    res.status(200).json({ message: 'Product removed from cart', cart });
+    res.status(200).json({ message: 'Producto eliminado del carrito', cart });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
